@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+mediapipe-env/
+.env/
+
+# CSV / dataset files (optional: you may want to keep raw data out of repo)
+hand_data.csv
+
+# VS Code settings
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Logs
+*.log
+
+# Python egg / build files
+*.egg-info/
+build/
+dist/
+
+# Jupyter notebooks checkpoints (if you use notebooks)
+.ipynb_checkpoints/
+
+# PyCharm
+.idea/
