@@ -31,3 +31,4 @@ dist/
 # PyCharm
 .idea/
 .venv/
+.venv/
