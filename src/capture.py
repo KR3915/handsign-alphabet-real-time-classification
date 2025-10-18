@@ -1,12 +1,27 @@
 import cv2
 import mediapipe as mp
-
+import math
 # Initialize MediaPipe Hands and OpenCV Video Capture
 mp_hands = mp.solutions.hands # Alias the hands solution module for easier reference
 cap = cv2.VideoCapture(0)
 hands = mp_hands.Hands()
 drawing = mp.solutions.drawing_utils
 
+# Function to calculate depth factor
+
+
+def depth_factor(val, depth, k=2.5, clamp=0.25):
+    val1, val2 = val
+
+    # Clamp depth range so extreme values don’t explode
+    depth_clamped = max(-clamp, min(clamp, depth))
+
+    # Apply smooth sigmoid-like scaling (stable near 0, limited when close)
+    scale = 1.0 / (1.0 + k * depth_clamped)   # base linear
+    scale = scale * (1.0 - 0.5 * (1 / (1 + math.exp(-10 * (depth_clamped + clamp/2)))))  
+
+    factor = -scale
+    return (val1 / factor, val2 / factor)
 
 # Function to get relative position in pixels
 def get_relative_position(wrist_lm, landmark_lm, W, H):
@@ -69,7 +84,7 @@ while True:
             index_tip_landmark = hand_landmarks.landmark[index_tip]
 
 
-            index_mcp_X, index_mcp_Y = get_relative_position(wrist_landmark, index_mcp_landmark, W, H)
+            index_mcp_X, index_mcp_Y = depth_factor(get_relative_position(wrist_landmark, index_mcp_landmark, W, H), depth=index_dip_landmark.z)
             index_pip_X, index_pip_Y = get_relative_position(wrist_landmark, index_pip_landmark, W, H)
             index_dip_X, index_dip_Y = get_relative_position(wrist_landmark, index_dip_landmark, W, H)
             index_tip_X, index_tip_Y = get_relative_position(wrist_landmark, index_tip_landmark, W, H)
@@ -79,7 +94,7 @@ while True:
                 print(f'LEFT HAND INDEX: CMC: [{index_mcp_X},{index_mcp_Y}] | MCP: [{index_pip_X},{index_pip_Y}] | IP: [{index_dip_X},{index_dip_Y}] | TIP: [{index_tip_X},{index_tip_Y}]')
             elif handedness == 'Right':
                 print(f'RIGHT HAND THUMB: CMC: [{thumb_cmc_X},{thumb_cmc_Y}] | MCP: [{thumb_mcp_X},{thumb_mcp_Y}] | IP: [{thumb_ip_X},{thumb_ip_Y}] | TIP: [{thumb_tip_X},{thumb_tip_Y}]')
-                print(f'RIGHT HAND INDEX: CMC: [{index_mcp_X},{index_mcp_Y}] | MCP: [{index_pip_X},{index_pip_Y}] | IP: [{index_dip_X},{index_dip_Y}] | TIP: [{index_tip_X},{index_tip_Y}, Y: {index_dip_landmark.y:.4f}]')
+                print(f'RIGHT HAND INDEX: CMC: [{index_mcp_X},{index_mcp_Y}] | MCP: [{index_pip_X},{index_pip_Y}] | IP: [{index_dip_X},{index_dip_Y}] | TIP: [{index_tip_X},{index_tip_Y}, Y: {index_dip_landmark.z:.4f}]')
 
             wrist_position = (wrist_landmark.x, wrist_landmark.y)
 
