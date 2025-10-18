@@ -67,35 +67,87 @@ while True:
             thumb_ip_landmark = hand_landmarks.landmark[thumb_ip]
             thumb_tip_landmark = hand_landmarks.landmark[thumb_tip]
             
-            thumb_cmc_X, thumb_cmc_Y = get_relative_position(wrist_landmark, thumb_cmc_landmark, W, H)
-            thumb_mcp_X, thumb_mcp_Y = get_relative_position(wrist_landmark, thumb_mcp_landmark, W, H)
-            thumb_ip_X, thumb_ip_Y = get_relative_position(wrist_landmark, thumb_ip_landmark, W, H)
-            thumb_tip_X, thumb_tip_Y = get_relative_position(wrist_landmark, thumb_tip_landmark, W, H)
+            thumb_cmc_X, thumb_cmc_Y = depth_factor(get_relative_position(wrist_landmark, thumb_cmc_landmark, W, H), depth=thumb_cmc_landmark.z)
+            thumb_mcp_X, thumb_mcp_Y = depth_factor(get_relative_position(wrist_landmark, thumb_mcp_landmark, W, H), depth=thumb_mcp_landmark.z)
+            thumb_ip_X, thumb_ip_Y = depth_factor(get_relative_position(wrist_landmark, thumb_ip_landmark, W, H), depth=thumb_ip_landmark.z)
+            thumb_tip_X, thumb_tip_Y = depth_factor(get_relative_position(wrist_landmark, thumb_tip_landmark, W, H), depth=thumb_tip_landmark.z)
             
             #----- INDEX -----
             index_mcp = mp_hands.HandLandmark.INDEX_FINGER_MCP
             index_pip = mp_hands.HandLandmark.INDEX_FINGER_PIP
             index_dip = mp_hands.HandLandmark.INDEX_FINGER_DIP
             index_tip = mp_hands.HandLandmark.INDEX_FINGER_TIP
-
+            # --index landmark --
             index_mcp_landmark = hand_landmarks.landmark[index_mcp]
             index_pip_landmark = hand_landmarks.landmark[index_pip]
             index_dip_landmark = hand_landmarks.landmark[index_dip]
             index_tip_landmark = hand_landmarks.landmark[index_tip]
-
-
+            #-- calculate depth factor for index finger --
             index_mcp_X, index_mcp_Y = depth_factor(get_relative_position(wrist_landmark, index_mcp_landmark, W, H), depth=index_dip_landmark.z)
-            index_pip_X, index_pip_Y = get_relative_position(wrist_landmark, index_pip_landmark, W, H)
-            index_dip_X, index_dip_Y = get_relative_position(wrist_landmark, index_dip_landmark, W, H)
-            index_tip_X, index_tip_Y = get_relative_position(wrist_landmark, index_tip_landmark, W, H)
+            index_pip_X, index_pip_Y = depth_factor(get_relative_position(wrist_landmark, index_pip_landmark, W, H), depth=index_dip_landmark.z)
+            index_dip_X, index_dip_Y = depth_factor(get_relative_position(wrist_landmark, index_dip_landmark, W, H), depth=index_dip_landmark.z)
+            index_tip_X, index_tip_Y = depth_factor(get_relative_position(wrist_landmark, index_tip_landmark, W, H), depth=index_dip_landmark.z)
+
+            #---- MIDDLE ------
+            middle_mcp = mp_hands.HandLandmark.MIDDLE_FINGER_MCP
+            middle_pip = mp_hands.HandLandmark.MIDDLE_FINGER_PIP
+            middle_dip = mp_hands.HandLandmark.MIDDLE_FINGER_DIP
+            middle_tip = mp_hands.HandLandmark.MIDDLE_FINGER_TIP
+            # --middle landmark --
+            middle_mcp_landmark = hand_landmarks.landmark[middle_mcp]
+            middle_pip_landmark = hand_landmarks.landmark[middle_pip]
+            middle_dip_landmark = hand_landmarks.landmark[middle_dip]
+            middle_tip_landmark = hand_landmarks.landmark[middle_tip]
+            #-- calculate depth factor for middle finger --
+            middle_mcp_X, middle_mcp_Y = depth_factor(get_relative_position(wrist_landmark, middle_mcp_landmark, W, H), depth=middle_dip_landmark.z)
+            middle_pip_X, middle_pip_Y = depth_factor(get_relative_position(wrist_landmark, middle_pip_landmark, W, H), depth=middle_dip_landmark.z)
+            middle_dip_X, middle_dip_Y = depth_factor(get_relative_position(wrist_landmark, middle_dip_landmark, W, H), depth=middle_dip_landmark.z)
+            middle_tip_X, middle_tip_Y = depth_factor(get_relative_position(wrist_landmark, middle_tip_landmark, W, H), depth=middle_dip_landmark.z)
             # Separate print statements based on handedness
+            # RING FINGER
+            ring_mcp = mp_hands.HandLandmark.RING_FINGER_MCP
+            ring_pip = mp_hands.HandLandmark.RING_FINGER_PIP
+            ring_dip = mp_hands.HandLandmark.RING_FINGER_DIP
+            ring_tip = mp_hands.HandLandmark.RING_FINGER_TIP
+            # --ring landmark --
+            ring_mcp_landmark = hand_landmarks.landmark[ring_mcp]
+            ring_pip_landmark = hand_landmarks.landmark[ring_pip]
+            ring_dip_landmark = hand_landmarks.landmark[ring_dip]
+            ring_tip_landmark = hand_landmarks.landmark[ring_tip]
+            #-- calculate depth factor for ring finger --
+            ring_mcp_X, ring_mcp_Y = depth_factor(get_relative_position(wrist_landmark, ring_mcp_landmark, W, H), depth=ring_dip_landmark.z)
+            ring_pip_X, ring_pip_Y = depth_factor(get_relative_position(wrist_landmark, ring_pip_landmark, W, H), depth=ring_dip_landmark.z)
+            ring_dip_X, ring_dip_Y = depth_factor(get_relative_position(wrist_landmark, ring_dip_landmark, W, H), depth=ring_dip_landmark.z)
+            ring_tip_X, ring_tip_Y = depth_factor(get_relative_position(wrist_landmark, ring_tip_landmark, W, H), depth=ring_dip_landmark.z)
+            # PINKY FINGER
+            pinky_mcp = mp_hands.HandLandmark.PINKY_MCP
+            pinky_pip = mp_hands.HandLandmark.PINKY_PIP
+            pinky_dip = mp_hands.HandLandmark.PINKY_DIP
+            pinky_tip = mp_hands.HandLandmark.PINKY_TIP
+            # --pinky landmark --
+            pinky_mcp_landmark = hand_landmarks.landmark[pinky_mcp]
+            pinky_pip_landmark = hand_landmarks.landmark[pinky_pip]
+            pinky_dip_landmark = hand_landmarks.landmark[pinky_dip]
+            pinky_tip_landmark = hand_landmarks.landmark[pinky_tip]
+            #-- calculate depth factor for pinky finger --
+            pinky_mcp_X, pinky_mcp_Y = depth_factor(get_relative_position(wrist_landmark, pinky_mcp_landmark, W, H), depth=pinky_dip_landmark.z)
+            pinky_pip_X, pinky_pip_Y = depth_factor(get_relative_position(wrist_landmark, pinky_pip_landmark, W, H), depth=pinky_dip_landmark.z)
+            pinky_dip_X, pinky_dip_Y = depth_factor(get_relative_position(wrist_landmark, pinky_dip_landmark, W, H), depth=pinky_dip_landmark.z)
+            pinky_tip_X, pinky_tip_Y = depth_factor(get_relative_position(wrist_landmark, pinky_tip_landmark, W, H), depth=pinky_dip_landmark.z)        
+            
             if handedness == 'Left':
                 print(f'LEFT HAND THUMB: CMC: [{thumb_cmc_X},{thumb_cmc_Y}] | MCP: [{thumb_mcp_X},{thumb_mcp_Y}] | IP: [{thumb_ip_X},{thumb_ip_Y}] | TIP: [{thumb_tip_X},{thumb_tip_Y}]')
                 print(f'LEFT HAND INDEX: CMC: [{index_mcp_X},{index_mcp_Y}] | MCP: [{index_pip_X},{index_pip_Y}] | IP: [{index_dip_X},{index_dip_Y}] | TIP: [{index_tip_X},{index_tip_Y}]')
+                print(f'LEFT HAND MIDDLE: MCP: [{middle_mcp_X},{middle_mcp_Y}] | PIP: [{middle_pip_X},{middle_pip_Y}] | DIP: [{middle_dip_X},{middle_dip_Y}] | TIP: [{middle_tip_X},{middle_tip_Y}]')
+                print(f'LEFT HAND RING: MCP: [{ring_mcp_X},{ring_mcp_Y}] | PIP: [{ring_pip_X},{ring_pip_Y}] | DIP: [{ring_dip_X},{ring_dip_Y}] | TIP: [{ring_tip_X},{ring_tip_Y}]')
+                print(f'LEFT HAND PINKY: MCP: [{pinky_mcp_X},{pinky_mcp_Y}] | PIP: [{pinky_pip_X},{pinky_pip_Y}] | DIP: [{pinky_dip_X},{pinky_dip_Y}] | TIP: [{pinky_tip_X},{pinky_tip_Y}]')
             elif handedness == 'Right':
                 print(f'RIGHT HAND THUMB: CMC: [{thumb_cmc_X},{thumb_cmc_Y}] | MCP: [{thumb_mcp_X},{thumb_mcp_Y}] | IP: [{thumb_ip_X},{thumb_ip_Y}] | TIP: [{thumb_tip_X},{thumb_tip_Y}]')
                 print(f'RIGHT HAND INDEX: CMC: [{index_mcp_X},{index_mcp_Y}] | MCP: [{index_pip_X},{index_pip_Y}] | IP: [{index_dip_X},{index_dip_Y}] | TIP: [{index_tip_X},{index_tip_Y}, Y: {index_dip_landmark.z:.4f}]')
-
+                print(f'RIGHT HAND MIDDLE: MCP: [{middle_mcp_X},{middle_mcp_Y}] | PIP: [{middle_pip_X},{middle_pip_Y}] | DIP: [{middle_dip_X},{middle_dip_Y}] | TIP: [{middle_tip_X},{middle_tip_Y}]')
+                print(f'RIGHT HAND RING: MCP: [{ring_mcp_X},{ring_mcp_Y}] | PIP: [{ring_pip_X},{ring_pip_Y}] | DIP: [{ring_dip_X},{ring_dip_Y}] | TIP: [{ring_tip_X},{ring_tip_Y}]')
+                print(f'RIGHT HAND PINKY: MCP: [{pinky_mcp_X},{pinky_mcp_Y}] | PIP: [{pinky_pip_X},{pinky_pip_Y}] | DIP: [{pinky_dip_X},{pinky_dip_Y}] | TIP: [{pinky_tip_X},{pinky_tip_Y}]')
+            # Get wrist position
             wrist_position = (wrist_landmark.x, wrist_landmark.y)
 
             #relative_position = get_relative_position(wrist_position, frame_center)
