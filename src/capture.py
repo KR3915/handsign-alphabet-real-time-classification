@@ -23,20 +23,6 @@ def depth_factor(val, depth, k=2.5, clamp=0.25):
     factor = -scale
     return (val1 / factor, val2 / factor)
 
-# Function to get relative position in pixels
-def get_relative_position(wrist_lm, landmark_lm, W, H):
-    # Convert normalized coordinates to pixel coordinates
-    wrist_x_px = int(wrist_lm.x * W)
-    wrist_y_px = int(wrist_lm.y * H)
-    landmark_x_px = int(landmark_lm.x * W)
-    landmark_y_px = int(landmark_lm.y * H)
-    
-    # Calculate the pixel difference
-    relative_x = landmark_x_px - wrist_x_px
-    relative_y = landmark_y_px - wrist_y_px
-    
-    return relative_x, relative_y
-
 # ---check if the webcam is capturing correctly---
 while True:
     ret, frame = cap.read()
@@ -67,10 +53,10 @@ while True:
             thumb_ip_landmark = hand_landmarks.landmark[thumb_ip]
             thumb_tip_landmark = hand_landmarks.landmark[thumb_tip]
             
-            thumb_cmc_X, thumb_cmc_Y = depth_factor(get_relative_position(wrist_landmark, thumb_cmc_landmark, W, H), depth=thumb_cmc_landmark.z)
-            thumb_mcp_X, thumb_mcp_Y = depth_factor(get_relative_position(wrist_landmark, thumb_mcp_landmark, W, H), depth=thumb_mcp_landmark.z)
-            thumb_ip_X, thumb_ip_Y = depth_factor(get_relative_position(wrist_landmark, thumb_ip_landmark, W, H), depth=thumb_ip_landmark.z)
-            thumb_tip_X, thumb_tip_Y = depth_factor(get_relative_position(wrist_landmark, thumb_tip_landmark, W, H), depth=thumb_tip_landmark.z)
+            thumb_cmc_X, thumb_cmc_Y = depth_factor((thumb_cmc_landmark.x - wrist_landmark.x, thumb_cmc_landmark.y - wrist_landmark.y), depth=thumb_cmc_landmark.z)
+            thumb_mcp_X, thumb_mcp_Y = depth_factor((thumb_mcp_landmark.x - wrist_landmark.x, thumb_mcp_landmark.y - wrist_landmark.y), depth=thumb_mcp_landmark.z)
+            thumb_ip_X, thumb_ip_Y = depth_factor((thumb_ip_landmark.x - wrist_landmark.x, thumb_ip_landmark.y - wrist_landmark.y), depth=thumb_ip_landmark.z)
+            thumb_tip_X, thumb_tip_Y = depth_factor((thumb_tip_landmark.x - wrist_landmark.x, thumb_tip_landmark.y - wrist_landmark.y), depth=thumb_tip_landmark.z)
             
             #----- INDEX -----
             index_mcp = mp_hands.HandLandmark.INDEX_FINGER_MCP
@@ -83,10 +69,10 @@ while True:
             index_dip_landmark = hand_landmarks.landmark[index_dip]
             index_tip_landmark = hand_landmarks.landmark[index_tip]
             #-- calculate depth factor for index finger --
-            index_mcp_X, index_mcp_Y = depth_factor(get_relative_position(wrist_landmark, index_mcp_landmark, W, H), depth=index_dip_landmark.z)
-            index_pip_X, index_pip_Y = depth_factor(get_relative_position(wrist_landmark, index_pip_landmark, W, H), depth=index_dip_landmark.z)
-            index_dip_X, index_dip_Y = depth_factor(get_relative_position(wrist_landmark, index_dip_landmark, W, H), depth=index_dip_landmark.z)
-            index_tip_X, index_tip_Y = depth_factor(get_relative_position(wrist_landmark, index_tip_landmark, W, H), depth=index_dip_landmark.z)
+            index_mcp_X, index_mcp_Y = depth_factor((index_mcp_landmark.x - wrist_landmark.x, index_mcp_landmark.y - wrist_landmark.y), depth=index_mcp_landmark.z)
+            index_pip_X, index_pip_Y = depth_factor((index_pip_landmark.x - wrist_landmark.x, index_pip_landmark.y - wrist_landmark.y), depth=index_pip_landmark.z)
+            index_dip_X, index_dip_Y = depth_factor((index_dip_landmark.x - wrist_landmark.x, index_dip_landmark.y - wrist_landmark.y), depth=index_dip_landmark.z)
+            index_tip_X, index_tip_Y = depth_factor((index_tip_landmark.x - wrist_landmark.x, index_tip_landmark.y - wrist_landmark.y), depth=index_tip_landmark.z)
 
             #---- MIDDLE ------
             middle_mcp = mp_hands.HandLandmark.MIDDLE_FINGER_MCP
@@ -99,10 +85,10 @@ while True:
             middle_dip_landmark = hand_landmarks.landmark[middle_dip]
             middle_tip_landmark = hand_landmarks.landmark[middle_tip]
             #-- calculate depth factor for middle finger --
-            middle_mcp_X, middle_mcp_Y = depth_factor(get_relative_position(wrist_landmark, middle_mcp_landmark, W, H), depth=middle_dip_landmark.z)
-            middle_pip_X, middle_pip_Y = depth_factor(get_relative_position(wrist_landmark, middle_pip_landmark, W, H), depth=middle_dip_landmark.z)
-            middle_dip_X, middle_dip_Y = depth_factor(get_relative_position(wrist_landmark, middle_dip_landmark, W, H), depth=middle_dip_landmark.z)
-            middle_tip_X, middle_tip_Y = depth_factor(get_relative_position(wrist_landmark, middle_tip_landmark, W, H), depth=middle_dip_landmark.z)
+            middle_mcp_X, middle_mcp_Y = depth_factor((middle_mcp_landmark.x - wrist_landmark.x, middle_mcp_landmark.y - wrist_landmark.y), depth=middle_mcp_landmark.z)
+            middle_pip_X, middle_pip_Y = depth_factor((middle_pip_landmark.x - wrist_landmark.x, middle_pip_landmark.y - wrist_landmark.y), depth=middle_pip_landmark.z)
+            middle_dip_X, middle_dip_Y = depth_factor((middle_dip_landmark.x - wrist_landmark.x, middle_dip_landmark.y - wrist_landmark.y), depth=middle_dip_landmark.z)
+            middle_tip_X, middle_tip_Y = depth_factor((middle_tip_landmark.x - wrist_landmark.x, middle_tip_landmark.y - wrist_landmark.y), depth=middle_tip_landmark.z)
             # Separate print statements based on handedness
             # RING FINGER
             ring_mcp = mp_hands.HandLandmark.RING_FINGER_MCP
@@ -115,10 +101,10 @@ while True:
             ring_dip_landmark = hand_landmarks.landmark[ring_dip]
             ring_tip_landmark = hand_landmarks.landmark[ring_tip]
             #-- calculate depth factor for ring finger --
-            ring_mcp_X, ring_mcp_Y = depth_factor(get_relative_position(wrist_landmark, ring_mcp_landmark, W, H), depth=ring_dip_landmark.z)
-            ring_pip_X, ring_pip_Y = depth_factor(get_relative_position(wrist_landmark, ring_pip_landmark, W, H), depth=ring_dip_landmark.z)
-            ring_dip_X, ring_dip_Y = depth_factor(get_relative_position(wrist_landmark, ring_dip_landmark, W, H), depth=ring_dip_landmark.z)
-            ring_tip_X, ring_tip_Y = depth_factor(get_relative_position(wrist_landmark, ring_tip_landmark, W, H), depth=ring_dip_landmark.z)
+            ring_mcp_X, ring_mcp_Y = depth_factor((ring_mcp_landmark.x - wrist_landmark.x, ring_mcp_landmark.y - wrist_landmark.y), depth=ring_mcp_landmark.z)
+            ring_pip_X, ring_pip_Y = depth_factor((ring_pip_landmark.x - wrist_landmark.x, ring_pip_landmark.y - wrist_landmark.y), depth=ring_pip_landmark.z)
+            ring_dip_X, ring_dip_Y = depth_factor((ring_dip_landmark.x - wrist_landmark.x, ring_dip_landmark.y - wrist_landmark.y), depth=ring_dip_landmark.z)
+            ring_tip_X, ring_tip_Y = depth_factor((ring_tip_landmark.x - wrist_landmark.x, ring_tip_landmark.y - wrist_landmark.y), depth=ring_tip_landmark.z)
             # PINKY FINGER
             pinky_mcp = mp_hands.HandLandmark.PINKY_MCP
             pinky_pip = mp_hands.HandLandmark.PINKY_PIP
@@ -130,10 +116,10 @@ while True:
             pinky_dip_landmark = hand_landmarks.landmark[pinky_dip]
             pinky_tip_landmark = hand_landmarks.landmark[pinky_tip]
             #-- calculate depth factor for pinky finger --
-            pinky_mcp_X, pinky_mcp_Y = depth_factor(get_relative_position(wrist_landmark, pinky_mcp_landmark, W, H), depth=pinky_dip_landmark.z)
-            pinky_pip_X, pinky_pip_Y = depth_factor(get_relative_position(wrist_landmark, pinky_pip_landmark, W, H), depth=pinky_dip_landmark.z)
-            pinky_dip_X, pinky_dip_Y = depth_factor(get_relative_position(wrist_landmark, pinky_dip_landmark, W, H), depth=pinky_dip_landmark.z)
-            pinky_tip_X, pinky_tip_Y = depth_factor(get_relative_position(wrist_landmark, pinky_tip_landmark, W, H), depth=pinky_dip_landmark.z)        
+            pinky_mcp_X, pinky_mcp_Y = depth_factor((pinky_mcp_landmark.x - wrist_landmark.x, pinky_mcp_landmark.y - wrist_landmark.y), depth=pinky_mcp_landmark.z)
+            pinky_pip_X, pinky_pip_Y = depth_factor((pinky_pip_landmark.x - wrist_landmark.x, pinky_pip_landmark.y - wrist_landmark.y), depth=pinky_pip_landmark.z)
+            pinky_dip_X, pinky_dip_Y = depth_factor((pinky_dip_landmark.x - wrist_landmark.x, pinky_dip_landmark.y - wrist_landmark.y), depth=pinky_dip_landmark.z)
+            pinky_tip_X, pinky_tip_Y = depth_factor((pinky_tip_landmark.x - wrist_landmark.x, pinky_tip_landmark.y - wrist_landmark.y), depth=pinky_tip_landmark.z)        
             
             if handedness == 'Left':
                 print(f'LEFT HAND THUMB: CMC: [{thumb_cmc_X},{thumb_cmc_Y}] | MCP: [{thumb_mcp_X},{thumb_mcp_Y}] | IP: [{thumb_ip_X},{thumb_ip_Y}] | TIP: [{thumb_tip_X},{thumb_tip_Y}]')
@@ -161,8 +147,12 @@ while True:
             
     # Display the frame
     cv2.imshow("Hand Joints", frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('q'):
         break
+ 
+
     
 cap.release()
 cv2.destroyAllWindows()
+hands.close()
