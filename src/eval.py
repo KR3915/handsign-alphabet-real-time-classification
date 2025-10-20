@@ -105,7 +105,7 @@ while True:
 
     # --- Display the prediction on the frame ---
 
-    display_text = ':)' if prediction == 'A' else ':('
+    display_text = f'Predicted: {prediction} (Conf: {confidence:.2f})'
     cv2.putText(frame, display_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
     # Display the frame

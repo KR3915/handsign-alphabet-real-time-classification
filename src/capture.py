@@ -7,6 +7,7 @@ from typing import List
 from utils import depth_factor # Import from utils
 
 # Initialize MediaPipe Hands and OpenCV Video Capture
+counter = 0
 mp_hands = mp.solutions.hands # Alias the hands solution module for easier reference
 cap = cv2.VideoCapture(0)
 # Use confidence thresholds for more stable detection
@@ -84,22 +85,25 @@ while True:
             
     # Display the frame
     cv2.imshow("Hand Joints", frame)
-    
     key = cv2.waitKey(1) & 0xFF
-    if key.isalpha():
-        
-        # Combine right and left hand data, and add the label
-        row = right_hand_coords + left_hand_coords + [key]
-        
-        # Check if file exists to write header
-        file_exists = os.path.isfile(DATA_FILE)
-        
-        with open(DATA_FILE, 'a', newline='') as f:
-            writer = csv.writer(f)
-            if not file_exists:
-                writer.writerow(header) # Write header if file is new
-            writer.writerow(row)
-            print(f"Saved data for label '{key}'")
+    if key != 255:  # key pressed
+        try:
+            label = chr(key)
+        except ValueError:
+            label = None
+
+        if label and label.isalpha():
+            row = right_hand_coords + left_hand_coords + [label]
+
+            file_exists = os.path.isfile(DATA_FILE)
+
+            with open(DATA_FILE, 'a', newline='') as f:
+                writer = csv.writer(f)
+                if not file_exists:
+                    writer.writerow(header)
+                writer.writerow(row)
+                print(f"Saved data for label '{label}' | {counter}")
+                counter += 1
 
 cap.release()
 cv2.destroyAllWindows()
