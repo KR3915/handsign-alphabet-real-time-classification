@@ -84,12 +84,12 @@ while True:
             
     # Display the frame
     cv2.imshow("Hand Joints", frame)
+    
     key = cv2.waitKey(1) & 0xFF
-    if key == ord('q'):
-        break
-    if key == ord('a'):
+    if key.isalpha():
+        
         # Combine right and left hand data, and add the label
-        row = right_hand_coords + left_hand_coords + ['A']
+        row = right_hand_coords + left_hand_coords + [key]
         
         # Check if file exists to write header
         file_exists = os.path.isfile(DATA_FILE)
@@ -99,20 +99,8 @@ while True:
             if not file_exists:
                 writer.writerow(header) # Write header if file is new
             writer.writerow(row)
-            print(f"Saved data for label 'A'")
+            print(f"Saved data for label '{key}'")
 
-    if key == ord('b'):    # Combine right and left hand data, and add the label
-        row = right_hand_coords + left_hand_coords + ['B']
-
-        # Check if file exists to write header
-        file_exists = os.path.isfile(DATA_FILE)
-        
-        with open(DATA_FILE, 'a', newline='') as f:
-            writer = csv.writer(f)
-            if not file_exists:
-                writer.writerow(header) # Write header if file is new
-            writer.writerow(row)
-            print(f"Saved data for label 'B'")
 cap.release()
 cv2.destroyAllWindows()
 hands.close()
